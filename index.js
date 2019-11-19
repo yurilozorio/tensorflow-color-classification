@@ -113,17 +113,19 @@ const train = async (model, tensors) => {
 }
 
 const main = async () => {
-  const tensors = parseData();
-  const model = createModel();
+  // const tensors = parseData();
+  // const model = createModel();
 
-  const trainedModel = await train(model, tensors)
+  // const trainedModel = await train(model, tensors)
 
-  //const trainedModel = await tf.loadLayersModel('file://trainedModel/model.json');
+  const trainedModel = await tf.loadLayersModel('file://trainedModel/model.json');
 
+  //Executes the provided function fn and after it is executed,
+  //cleans up all intermediate tensors allocated by fn except those returned by fn.
   tf.tidy(() => {
-    const r = 217;
+    const r = 204;
     const g = 204;
-    const b = 62;
+    const b = 204;
 
     const input = tf.tensor2d([
       [r/255, g/255, b/255]
