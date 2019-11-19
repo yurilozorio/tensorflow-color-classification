@@ -3,15 +3,15 @@ const tf = require('@tensorflow/tfjs');
 const colorData = require('./colorData.json');
 
 let labelList = [
-  'red-ish',
-  'green-ish',
-  'blue-ish',
-  'orange-ish',
-  'yellow-ish',
-  'pink-ish',
-  'purple-ish',
-  'brown-ish',
-  'grey-ish'
+  'avermelhado',
+  'esverdeado',
+  'azulado',
+  'alaranjado',
+  'amarelado',
+  'rosado',
+  'arroxeado',
+  'amarronzado',
+  'acizentado'
 ]
 
 const parseData = () => {
@@ -123,8 +123,8 @@ const main = async () => {
   //Executes the provided function fn and after it is executed,
   //cleans up all intermediate tensors allocated by fn except those returned by fn.
   tf.tidy(() => {
-    const r = 204;
-    const g = 204;
+    const r = 255;
+    const g = 102;
     const b = 204;
 
     const input = tf.tensor2d([
