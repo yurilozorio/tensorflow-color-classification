@@ -75,7 +75,7 @@ const createModel = () => {
   model.add(hidden);
   model.add(output);
 
-  const LEARNING_RATE = 0.25;
+  const LEARNING_RATE = 0.20;
 
   //Create a optimizer with stochastic gradient descent 
   //to go down the graph of the loss function to try to minimize that loss.
@@ -96,7 +96,7 @@ const createModel = () => {
   return model;
 }
 
-async function train(model, tensors) {
+const train = async (model, tensors) => {
   //Train the model
   await model.fit(tensors.xs, tensors.ys, {
     //Whether to shuffle the training data before each epoch.
@@ -104,32 +104,39 @@ async function train(model, tensors) {
     //Float between 0 and 1: fraction of the training data to be used as validation data.
     validationSplit: 0.1,
     //The number of times to iterate over the training dataset.
-    epochs: 50,
+    epochs: 1000,
   });
+
+  await model.save('file://trainedModel');
+
+  return model;
 }
 
 const main = async () => {
   const tensors = parseData();
   const model = createModel();
 
-  await train(model, tensors)
+  const trainedModel = await train(model, tensors)
+
+  //const trainedModel = await tf.loadLayersModel('file://trainedModel/model.json');
 
   tf.tidy(() => {
-    const r = 255;
-    const g = 0;
-    const b = 0;
+    const r = 217;
+    const g = 204;
+    const b = 62;
 
     const input = tf.tensor2d([
-      [r, g, b]
+      [r/255, g/255, b/255]
     ]);
 
     //After train, execute the inference for the input tensors.
-    let results = model.predict(input);
+    let results = trainedModel.predict(input);
 
     //Returns the indice of the maximum value along an axis.
     let argMax = results.argMax(1);
 
     //Synchronously downloads the values from the tf.Tensor. 
+    //That is needed because the data is still on the GPU.
     let index = argMax.dataSync()[0];
 
     //The output value should be the index of the output label list.
